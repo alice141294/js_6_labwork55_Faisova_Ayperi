@@ -1,26 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
+import AddIngridients from './component/AddIngrigientsToBurger/AddIngridients';
 import './App.css';
+import BurgerBuilder from "./component/BurgerBuilder/BurgerBuilder";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+class App extends Component {
+  state = {
+    
+    ingredients: [
+      
+      {name: 'Meat', count: 0},
+      {name: 'Cheese', count: 0},
+      {name: 'Salad', count: 0},
+      {name: 'Bacon', count: 0},
+      
+    ],
+    totalPrice: 20
+    
+  };
 
-export default App;
+
+  addNewIngridient = (elem) => {
+    const ingredients = [...this.state.ingredients];
+    let totalPrice = this.state.totalPrice;
+    const index = ingredients.findIndex(i => i.name === elem.name)
+    ingredients[index].count ++;
+    totalPrice += elem.price;
+    this.setState({totalPrice, ingredients});
+  };
+
+  removeIngredient = (elem) => {
+    let ingredients = [...this.state.ingredients];
+    let totalPrice = this.state.totalPrice;
+    const index = ingredients.findIndex(i => i.name === elem.name);
+    ingredients[index].count --;
+    totalPrice -= elem.price;
+    this.setState({totalPrice, ingredients});
+  };
+
+  render(){
+    return (
+      <div className="App">
+        <AddIngridients
+          oneIngredient = {this.state.ingredients}
+          addNewIngridient = {this.addNewIngridient}
+          removeIngredient = {this.removeIngredient}
+        />
+        <BurgerBuilder
+          price = {this.state.totalPrice}
+          ingredients = {this.state.ingredients}
+        />
+      </div>
+      )
+    }
+    
+  }
+  
+  export default App;
+  
